@@ -1,39 +1,50 @@
-import { useQueryClient, useMutation } from '@tanstack/react-query'
-import React from 'react'
-import { useForm } from 'react-hook-form'
+import { BookForm } from './BookForm';
+import {  useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
-function BookCreate() {
-  const{ register, handleSubmit, formState: {errors}} = useForm()
-  const queryClient = useQueryClient();
+
+
+
+function BookCreate () {
+
+  const queryClient = useQueryClient()
   const navigate = useNavigate()
 
-  const createBookMutation = useMutation({
+
+  const processData = (data) => {
+
+      console.log(data);
+     createBookMutation.mutate(data)
+  }
+  
+
+ const createBookMutation = useMutation({
     mutationFn: async (data) => {
-      const response = await fetch('http://localhost:3000/books', {
+      console.log(data);
+      const response = await fetch(`${import.meta.env.VITE_BOOKS_API_URL}`, {
         method: 'POST',
-        headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify(data)
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body:  JSON.stringify(data)
       })
+
       return response.json()
+
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["books"]);
+      queryClient.invalidateQueries(['booksData'])
       navigate('/admin/books')
     }
-  })
+})
 
   return (
-    <div>
-      <h2>Create new book</h2>
-      <form onSubmit={handleSubmit(createBookMutation.mutate)}>
-        <input {...register('title')} type="text" placeholder="Title"/><br />
-        <input {...register('author')} type="text" placeholder="Author"/><br />
-        <input {...register('published_year')} type="text" placeholder="Year"/><br />
-        <input {...register('genre')} type="text" placeholder="Genre"/><br />
-        <button type="submit">Create Book</button>
-      </form>
-    </div>
+     
+    <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
+    <h2 className="text-2xl font-bold mb-4 text-gray-800">Create New Book</h2>
+    <BookForm onDataCollected = {processData}/>
+</div>
+
   )
 }
 

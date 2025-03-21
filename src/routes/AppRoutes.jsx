@@ -6,8 +6,12 @@ import Dashboard from '../pages/Dashboard';
 import AutoResponse from '../pages/AutoResponse';
 import Customers from '../pages/Customers';
 import Subscriptions from '../pages/Subscriptions';
-import Books from '../pages/Books'
+import Books from '../pages/Books';
 import BookCreate from '../components/books/BookCreate';
+import BookEdit from '../components/books/BookEdit'
+import Players from '../pages/Players';
+import PlayersCreate from '../components/players/PlayersCreate';
+import PlayersEdit from '../components/players/PlayersEdit';
 
 const router = createBrowserRouter([
   {
@@ -48,7 +52,25 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'create',
-            element: <BookCreate />
+            element: <BookCreate/>
+          },
+          {
+            path: ":id/edit",
+            element: <BookEdit/>
+          }
+        ]
+      },
+      {
+        path: 'players',
+        element: <Players />,
+        children: [
+          {
+            path: 'create',
+            element: <PlayersCreate />
+          },
+          {
+            path: ":_id/edit",
+            element: <PlayersEdit />
           }
         ]
       }
